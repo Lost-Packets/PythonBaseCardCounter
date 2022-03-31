@@ -94,7 +94,7 @@ class CountingLog(Deck):
             self.runningCount = self.runningCount + 0
  
     def TrueCount(self):
-        self.trueCount = self.runningCount / (len(self.FinalDeck) & 52)
+        self.trueCount = self.runningCount / round(len(self.FinalDeck) / 52)
         print("True Count : {}".format(self.trueCount))
         print("Deck Count : {}".format(len(self.FinalDeck)))
 
