@@ -1,3 +1,6 @@
+import PySimpleGUI as sg
+import numpy as np
+
 class Card:
     def __init__(self, suit, val):
         self.suit = suit
@@ -162,8 +165,7 @@ class CountingLog(Deck):
                 self.total2 = self.total2 - 1
             print("% Of Next Card Being High: ", round(((self.totalLow2 / self.total2)*100), 2), "%" )
             print("% Of Next Card Being Low: ", round(((self.totalHigh2 / self.total2)*100), 2), "%" )
-        
-        
+                
 class Player:
     def __init__(self):
         pass
@@ -172,16 +174,89 @@ class Player:
 counter = CountingLog(8)
 counter.Merg()
 
+HeartsCol = [
+    [sg.Text("Hearts")],
+    [sg.Button("1 Hearts", key='-1 Hearts-')],
+    [sg.Button("2 Hearts", key='-2 Hearts-')],
+    [sg.Button("3 Hearts", key='-3 Hearts-')],
+    [sg.Button("4 Hearts", key='-4 Hearts-')],
+    [sg.Button("5 Hearts", key='-5 Hearts-')],
+    [sg.Button("6 Hearts", key='-6 Hearts-')],
+    [sg.Button("7 Hearts", key='-7 Hearts-')],
+    [sg.Button("8 Hearts", key='-8 Hearts-')],
+    [sg.Button("9 Hearts", key='-9 Hearts-')],
+    [sg.Button("10 Hearts", key='-10 Hearts-')],
+    [sg.Button("Ace Hearts", key='-Ace Hearts-')],
+    [sg.Button("Jack Hearts", key='-Jack Hearts-')],
+    [sg.Button("King Hearts", key='-King Hearts-')],
+    [sg.Button("Queen Hearts", key='-Queen Hearts-')]
+]
+
+ClubsCol = [
+    [sg.Text("Clubs")],
+    [sg.Button("1 Clubs", key='-1 Clubs-')],
+    [sg.Button("2 Clubs", key='-2 Clubs-')],
+    [sg.Button("3 Clubs", key='-3 Clubs-')],
+    [sg.Button("4 Clubs", key='-4 Clubs-')],
+    [sg.Button("5 Clubs", key='-5 Clubs-')],
+    [sg.Button("6 Clubs", key='-6 Clubs-')],
+    [sg.Button("7 Clubs", key='-7 Clubs-')],
+    [sg.Button("8 Clubs", key='-8 Clubs-')],
+    [sg.Button("9 Clubs", key='-9 Clubs-')],
+    [sg.Button("10 Clubs", key='-10 Clubs-')],
+    [sg.Button("Ace Clubs", key='-Ace Clubs-')],
+    [sg.Button("Jack Clubs", key='-Jack Clubs-')],
+    [sg.Button("King Clubs", key='-King Clubs-')],
+    [sg.Button("Queen Clubs", key='-Queen Clubs-')],
+]
+
+DiamondsCol = [
+    [sg.Text("Diamonds", key='-OUTPUT-')],
+    [sg.Button("1 Diamonds", key='-1 Diamonds-')],
+    [sg.Button("2 Diamonds", key='-2 Diamonds-')],
+    [sg.Button("3 Diamonds", key='-3 Diamonds-')],
+    [sg.Button("4 Diamonds", key='-4 Diamonds-')],
+    [sg.Button("5 Diamonds", key='-5 Diamonds-')],
+    [sg.Button("6 Diamonds", key='-6 Diamonds-')],
+    [sg.Button("7 Diamonds", key='-7 Diamonds-')],
+    [sg.Button("8 Diamonds", key='-8 Diamonds-')],
+    [sg.Button("9 Diamonds", key='-9 Diamonds-')],
+    [sg.Button("10 Diamonds", key='-10 Diamonds-')],
+    [sg.Button("Ace Diamonds", key='-Ace Diamonds-')],
+    [sg.Button("Jack Diamonds", key='-Jack Diamonds-')],
+    [sg.Button("King Diamonds", key='-King Diamonds-')],
+    [sg.Button("Queen Diamonds", key='-Queen Diamonds-')],
+]
+
+SpadesCol = [
+    [sg.Text("Spades")],
+    [sg.Button("1 Spades", key='-1 Spades-')],
+    [sg.Button("2 Spades", key='-2 Spades-')],
+    [sg.Button("3 Spades", key='-3 Spades-')],
+    [sg.Button("4 Spades", key='-4 Spades-')],
+    [sg.Button("5 Spades", key='-5 Spades-')],
+    [sg.Button("6 Spades", key='-6 Spades-')],
+    [sg.Button("7 Spades", key='-7 Spades-')],
+    [sg.Button("8 Spades", key='-8 Spades-')],
+    [sg.Button("9 Spades", key='-9 Spades-')],
+    [sg.Button("10 Spades", key='-10 Spades-')],
+    [sg.Button("Ace Spades", key='-Ace Spades-')],
+    [sg.Button("Jack Spades", key='-Jack Spades-')],
+    [sg.Button("King Spades", key='-King Spades-')],
+    [sg.Button("Queen Spades", key='-Queen Spades-')],
+]
+
+CardStat =[ [sg.Text('Card Statistics:')],
+            [sg.Output(size=(70,15), key='-OUTPUT-')],]
+
+layout = [[sg.Col(HeartsCol), sg.Col(ClubsCol), sg.Col(DiamondsCol), sg.Col(SpadesCol), sg.Col(CardStat)]]
+
+sg.theme('DarkBlue')
+window = sg.Window("demo", layout)
 while True:
-    _input = input("Enter Card (Diamonds Jack, 10 Diamonds, Diamonds Ace): ")
-    if _input == "q":
+    #read window
+    event, values = window.read()
+    # Close window
+    if event == sg.WIN_CLOSED:
         break
-
-    inputSep = _input.split(" ")
-    card = Card(inputSep[0], inputSep[1])
-    counter.assignment(card)
-    counter.TrueCount()
-    counter.RunningCOunt()
-    
-    del card
-
+window.close()
