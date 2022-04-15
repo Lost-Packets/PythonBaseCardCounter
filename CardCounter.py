@@ -6,6 +6,11 @@ class Card:
         self.suit = suit
         self.value = val
 
+    def __eq__(self, other):
+        if self.suit == other.suit and self.value == other.value:
+            return True
+        return False
+
     def show(self):
         print("{} {}".format(self.value, self.suit))
 
@@ -57,9 +62,9 @@ class Deck:
     def build(self):
         for i in ["Spades", "Clubs", "Diamonds", "Hearts"]:
             for v in range(2,11):
-                self.Cards.append(Card(i,v))
+                self.Cards.append(Card(i,str(v)))
             for q in ["Jack", "King", "Queen", "Ace",]:
-                self.Cards.append(Card(q,i))
+                self.Cards.append(Card(i,q))
 
     def Merg(self):
         self.build()
@@ -100,22 +105,22 @@ class CountingLog(Deck):
         self.totalLow2 = 50
         self.total2 = 104
         
-    def assignment(self, card):
-        for card in self.FinalDeck:
-            if card == card:
+    def assignment(self, cardobj):
+        for i in self.FinalDeck:
+            if i == cardobj:
                 self.FinalDeck.pop()
                 break;  
 
-        if card in self.low:
+        if cardobj in self.low:
             self.runningCount = self.runningCount + 1
 
-        elif card in self.high:
+        elif cardobj in self.high:
             self.runningCount = self.runningCount - 1
 
         else:
             self.runningCount = self.runningCount + 0
         
-        self.countingStats(card)
+        self.countingStats(cardobj)
  
     def TrueCount(self):
         self.trueCount = self.runningCount / round(len(self.FinalDeck) / 52)
@@ -133,8 +138,8 @@ class CountingLog(Deck):
             elif card in self.low:
                 self.totalLow = self.totalLow - 1
                 self.total = self.total - 1
-            print("% Of Next Card Being High: ", round(((self.totalLow / self.total)*100), 2), "%" )
-            print("% Of Next Card Being Low: ", round(((self.totalHigh / self.total)*100), 2), "%" )
+            print("% Of Next Card Being High: ", round(((self.totalHigh / self.total)*100), 2), "%" )
+            print("% Of Next Card Being Low: ", round(((self.totalLow / self.total)*100), 2), "%" )
 
         elif self.deckCount == 6:
             if card in self.high:
@@ -170,13 +175,9 @@ class Player:
     def __init__(self):
         pass
 
-# Main Program Loop
-counter = CountingLog(8)
-counter.Merg()
-
+# Formating #
 HeartsCol = [
     [sg.Text("Hearts")],
-    [sg.Button("1 Hearts", key='-1 Hearts-')],
     [sg.Button("2 Hearts", key='-2 Hearts-')],
     [sg.Button("3 Hearts", key='-3 Hearts-')],
     [sg.Button("4 Hearts", key='-4 Hearts-')],
@@ -194,7 +195,6 @@ HeartsCol = [
 
 ClubsCol = [
     [sg.Text("Clubs")],
-    [sg.Button("1 Clubs", key='-1 Clubs-')],
     [sg.Button("2 Clubs", key='-2 Clubs-')],
     [sg.Button("3 Clubs", key='-3 Clubs-')],
     [sg.Button("4 Clubs", key='-4 Clubs-')],
@@ -212,7 +212,6 @@ ClubsCol = [
 
 DiamondsCol = [
     [sg.Text("Diamonds", key='-OUTPUT-')],
-    [sg.Button("1 Diamonds", key='-1 Diamonds-')],
     [sg.Button("2 Diamonds", key='-2 Diamonds-')],
     [sg.Button("3 Diamonds", key='-3 Diamonds-')],
     [sg.Button("4 Diamonds", key='-4 Diamonds-')],
@@ -230,7 +229,6 @@ DiamondsCol = [
 
 SpadesCol = [
     [sg.Text("Spades")],
-    [sg.Button("1 Spades", key='-1 Spades-')],
     [sg.Button("2 Spades", key='-2 Spades-')],
     [sg.Button("3 Spades", key='-3 Spades-')],
     [sg.Button("4 Spades", key='-4 Spades-')],
@@ -251,11 +249,30 @@ CardStat =[ [sg.Text('Card Statistics:')],
 
 layout = [[sg.Col(HeartsCol), sg.Col(ClubsCol), sg.Col(DiamondsCol), sg.Col(SpadesCol), sg.Col(CardStat)]]
 
+# Main Program Loop
+counter = CountingLog(8)
+counter.Merg()
+
 sg.theme('DarkBlue')
-window = sg.Window("demo", layout)
+sg.Print('Card Counter Statistics', do_not_reroute_stdout=False)
+
+window = sg.Window("CardCounter", layout)
 while True:
     #read window
     event, values = window.read()
+    
+    #awful if statement
+    if event != sg.WINDOW_CLOSED:
+        print("####################################")
+        _input = window[event].get_text()
+        sepInput = _input.split(" ")
+        card = Card(sepInput[1], sepInput[0])
+        counter.assignment(card)
+        counter.TrueCount()
+        counter.RunningCOunt()
+        print("####################################")
+        del card
+
     # Close window
     if event == sg.WIN_CLOSED:
         break
